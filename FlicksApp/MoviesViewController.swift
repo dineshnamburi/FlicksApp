@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AFNetworking
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -59,12 +60,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         var movie_name = movies?[indexPath.row]["title"] as! String
         var movie_overview = movies?[indexPath.row]["overview"] as! String
-
+        
+        var poster_path = movies?[indexPath.row]["poster_path"] as! String
+        poster_path = "https://image.tmdb.org/t/p/w342" + poster_path
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for : indexPath) as! MovieCell
         //cell = "\(movie_name)"
         cell.movieLabel.text = "\(movie_name)"
         cell.movieOverview.text = "\(movie_overview)"
-        print ("row \(indexPath.row)")
+        let img_url = URL(string: poster_path)
+        cell.movieImage.setImageWith(img_url!)
+        print ("\(poster_path)")
+        cell.movieImage.clipsToBounds = true
+        cell.movieImage.layer.cornerRadius = 12
         return cell
     }
     
