@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -23,7 +24,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         
         
-        
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
@@ -35,6 +37,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as! [NSDictionary]
                     self.tableView.reloadData()
+                    MBProgressHUD.hide(for: self.view, animated: true)
                 }
             }
         }
@@ -67,6 +70,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         //cell = "\(movie_name)"
         cell.movieLabel.text = "\(movie_name)"
         cell.movieOverview.text = "\(movie_overview)"
+        cell.movieOverview.numberOfLines = 0
         let img_url = URL(string: poster_path)
         cell.movieImage.setImageWith(img_url!)
         print ("\(poster_path)")

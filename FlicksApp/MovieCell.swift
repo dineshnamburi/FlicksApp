@@ -16,7 +16,8 @@ class MovieCell: UITableViewCell {
         // Initialization code
     }
     
-    @IBOutlet weak var movieOverview: UITextView!
+    
+    @IBOutlet weak var movieOverview: UILabel!
     @IBOutlet weak var movieImage: UIImageView!
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
