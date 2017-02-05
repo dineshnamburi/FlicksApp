@@ -10,20 +10,24 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UICollectionViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
-    var movies: [NSDictionary]?
+   
+    @IBOutlet weak var CollectView: UICollectionView!
+        var movies: [NSDictionary]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-            tableView.dataSource = self
-            tableView.delegate = self
+        CollectView.dataSource = self
+        //CollectView.delegate = self
+            //tableView.dataSource = self
+            //tableView.delegate = self
         // Do any additional setup after loading the view.
         let refreshControl = UIRefreshControl()
         
-        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
-        tableView.insertSubview(refreshControl, at: 0)
+        //refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        //tableView.insertSubview(refreshControl, at: 0)
         
         MBProgressHUD.showAdded(to: self.view, animated: true)
 
@@ -37,7 +41,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as! [NSDictionary]
-                    self.tableView.reloadData()
+                    //self.tableView.reloadData()
+                    self.CollectView.reloadData()
                     MBProgressHUD.hide(for: self.view, animated: true)
                 }
             }
@@ -65,7 +70,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as! [NSDictionary]
-                    self.tableView.reloadData()
+                    //self.tableView.reloadData()
                     //MBProgressHUD.hide(for: self.view, animated: true)
                     refreshControl.endRefreshing()
                 }
@@ -76,8 +81,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
         if let movies = movies {
             return movies.count
         }
@@ -85,6 +89,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             return 0
         }
         
+    
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell{
+        var movie_name = movies?[indexPath.row]["title"] as! String
+        var movie_overview = movies?[indexPath.row]["overview"] as! String
+        
+        var poster_path = movies?[indexPath.row]["poster_path"] as! String
+        poster_path = "https://image.tmdb.org/t/p/w342" + poster_path
+        
+        let cell = CollectView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionCell", for: indexPath) as! MovieCollectionCell
+        let img_url = URL(string: poster_path)
+        cell.movieImage.setImageWith(img_url!)
+        return cell
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
@@ -93,16 +111,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         var poster_path = movies?[indexPath.row]["poster_path"] as! String
         poster_path = "https://image.tmdb.org/t/p/w342" + poster_path
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for : indexPath) as! MovieCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for : indexPath)
         //cell = "\(movie_name)"
-        cell.movieLabel.text = "\(movie_name)"
+        /*cell.movieLabel.text = "\(movie_name)"
         cell.movieOverview.text = "\(movie_overview)"
         cell.movieOverview.numberOfLines = 0
         let img_url = URL(string: poster_path)
         cell.movieImage.setImageWith(img_url!)
         print ("\(poster_path)")
         cell.movieImage.clipsToBounds = true
-        cell.movieImage.layer.cornerRadius = 12
+        cell.movieImage.layer.cornerRadius = 12*/
         return cell
     }
     
