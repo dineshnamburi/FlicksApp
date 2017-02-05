@@ -10,24 +10,33 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UICollectionViewDataSource {
+class MoviesViewController: UIViewController, UICollectionViewDataSource,UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
    
+  
+    @IBOutlet weak var searchBar: UISearchBar!
+
     @IBOutlet weak var CollectView: UICollectionView!
-        var movies: [NSDictionary]?
+    var movies: [NSDictionary]?
+    var filteredData: [NSDictionary]?
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         CollectView.dataSource = self
+        searchBar.delegate = self
         //CollectView.delegate = self
             //tableView.dataSource = self
             //tableView.delegate = self
         // Do any additional setup after loading the view.
         let refreshControl = UIRefreshControl()
         
-        //refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
-        //tableView.insertSubview(refreshControl, at: 0)
+        
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        
+        CollectView.insertSubview(refreshControl, at: 0)
         
         MBProgressHUD.showAdded(to: self.view, animated: true)
 
@@ -41,6 +50,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource {
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as! [NSDictionary]
+                    self.filteredData = self.movies
                     //self.tableView.reloadData()
                     self.CollectView.reloadData()
                     MBProgressHUD.hide(for: self.view, animated: true)
@@ -70,7 +80,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource {
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as! [NSDictionary]
+                    self.filteredData = self.movies
                     //self.tableView.reloadData()
+                    self.CollectView.reloadData()
                     //MBProgressHUD.hide(for: self.view, animated: true)
                     refreshControl.endRefreshing()
                 }
@@ -82,8 +94,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource {
         
     }
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        if let movies = movies {
-            return movies.count
+        if let filteredData = filteredData {
+            return filteredData.count
         }
         else{
             return 0
@@ -93,10 +105,10 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell{
-        var movie_name = movies?[indexPath.row]["title"] as! String
-        var movie_overview = movies?[indexPath.row]["overview"] as! String
+        var movie_name = filteredData?[indexPath.row]["title"] as! String
+        var movie_overview = filteredData?[indexPath.row]["overview"] as! String
         
-        var poster_path = movies?[indexPath.row]["poster_path"] as! String
+        var poster_path = filteredData?[indexPath.row]["poster_path"] as! String
         poster_path = "https://image.tmdb.org/t/p/w342" + poster_path
         
         let cell = CollectView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionCell", for: indexPath) as! MovieCollectionCell
@@ -105,6 +117,24 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource {
         return cell
     }
 
+    public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String){
+        var temp: [NSDictionary] = []
+        
+        for movie in movies!{
+                //print ("first succ \(movie)")
+            let title = movie["title"] as! String
+            if title.lowercased().range(of: searchText.lowercased()) != nil{
+                print ("\(movie)")
+                temp.append(movie)
+            }
+        }
+        self.filteredData = temp
+        print("\(temp)")
+        self.CollectView.reloadData()
+        
+    }
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         var movie_name = movies?[indexPath.row]["title"] as! String
         var movie_overview = movies?[indexPath.row]["overview"] as! String

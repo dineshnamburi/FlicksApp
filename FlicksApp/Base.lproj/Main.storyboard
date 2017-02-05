@@ -12,7 +12,6 @@
         <!--Movies View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="MoviesViewController" customModule="FlicksApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qO3-dL-7RC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -59,9 +58,11 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="568"/>
                     <connections>
-                        <outlet property="CollectView" destination="3Of-bO-K4I" id="4V1-Kr-JbC"/>
+                        <outlet property="CollectView" destination="3Of-bO-K4I" id="zqb-8m-hjG"/>
+                        <outlet property="searchBar" destination="L8d-hZ-z7F" id="DVP-32-Lqx"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-183" y="130"/>
         </scene>
