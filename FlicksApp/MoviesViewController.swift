@@ -20,9 +20,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             tableView.dataSource = self
             tableView.delegate = self
         // Do any additional setup after loading the view.
+        let refreshControl = UIRefreshControl()
         
-        
-        
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
         
         MBProgressHUD.showAdded(to: self.view, animated: true)
 
@@ -45,6 +46,32 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         
         
+        
+        
+        
+    }
+    
+    
+    func refreshControlAction(_ refreshControl: UIRefreshControl) {
+        //MBProgressHUD.showAdded(to: self.view, animated: true)
+        
+        
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            if let data = data {
+                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                    print(dataDictionary)
+                    self.movies = dataDictionary["results"] as! [NSDictionary]
+                    self.tableView.reloadData()
+                    //MBProgressHUD.hide(for: self.view, animated: true)
+                    refreshControl.endRefreshing()
+                }
+            }
+        }
+        task.resume()
         
         
         
