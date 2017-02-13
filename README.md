@@ -39,6 +39,41 @@ Challenges I faced during this app development are :
     - Properly alligning and sizing elements in storyboard
     - Filtering data in search box for Array of NSDictionaries
 
+
+# Project 2 - *FlicksApp*
+
+**FlicksApp** is a movies app displaying box office and top rental DVDs using [The Movie Database API](http://docs.themoviedb.apiary.io/#).
+
+Time spent: **15** hours spent in total
+
+## User Stories
+
+The following **required** functionality is completed:
+
+- [X] User can view movie details by tapping on a cell.
+- [X] User can select from a tab bar for either **Now Playing** or **Top Rated** movies.
+- [X] Customize the selection effect of the cell.
+
+The following **optional** features are implemented:
+
+- [ ] For the large poster, load the low resolution image first and then switch to the high resolution image when complete.
+- [ ] Customize the navigation bar.
+
+Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
+
+1. Tab Navigation
+2. Fading effect for images
+
+## Video Walkthrough 
+
+Here's a walkthrough of implemented user stories:
+
+<img src='http://i.imgur.com/OM2t4Kl.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+
+
 ## License
 
     Copyright [2017] [Dinesh Namburi]
